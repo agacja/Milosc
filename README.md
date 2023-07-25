@@ -1,2 +1,1 @@
-# Stake NFT's for token rewards.
-# Still doing some touchups 
+# Stake NFT's in assembly for token rewards.
