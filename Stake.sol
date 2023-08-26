@@ -6,17 +6,14 @@ import "erc721a/contracts/IERC721A.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
 
-contract Stake is Ownable, ERC721Holder {
+contract KochamCie is Ownable, ERC721Holder {
    
-  mapping(address => mapping(uint256 => bool)) private chuj;
+  mapping(address => mapping(uint256 => bool)) private data;
   mapping(address => mapping(uint256 => uint256)) private _userStakingTimestamp;
   mapping (address => mapping(uint256 =>bool)) private collected;
-  //mapping(uint256 => Quarter) private quarters;
-
-
  
-  using SafeERC20 for IERC20;
-    
+
+    using SafeERC20 for IERC20;
     address private _MILOSCSTAKING;
     uint256 private DaoValue;
 
@@ -27,7 +24,7 @@ contract Stake is Ownable, ERC721Holder {
         let ptr := mload(0x40)
             //Get location of this address and token in _userStakingData
             mstore(0x0, caller())
-            mstore(0x20, chuj.slot)
+            mstore(0x20, data.slot)
             mstore(0x20, keccak256(0x0, 0x40))
             mstore(0x00, tokenIds)
 
@@ -37,25 +34,15 @@ contract Stake is Ownable, ERC721Holder {
                mstore(0x0, 0x039f2e18) //'NotStaked()' selector
                 revert(0x1c, 0x04)
             }
-
-
-
-          sstore(keccak256(0x0, 0x40), 0x1)
+             sstore(keccak256(0x0, 0x40), 0x1)
            
-
         
-    
          let currentTime := timestamp()
  // Update _userStakingTimestamp
         mstore(0x20, _userStakingTimestamp.slot)
         mstore(0x20, keccak256(0x0, 0x40))
         mstore(0x00, tokenIds)
         sstore(keccak256(0x0, 0x40), currentTime)
-
-
-
-
-
 
          
             // store transferFrom selector
@@ -71,7 +58,7 @@ contract Stake is Ownable, ERC721Holder {
 
            let successTransferFrom := call(
                 gas(),
-                0xa11d11285db67c12a78e5B212D01Bf6DfCF692de,
+                0x571ae97bde80Fc2d53D66bfDeAe5Ba9Af34cEB43,
                 0,
                 transferFromData,
                 0x64, // Size of the transferFromData (100 bytes)
@@ -86,12 +73,6 @@ contract Stake is Ownable, ERC721Holder {
     }
   
 
-
-  
-
-
-
-
        
   function unstake(uint256 tokenIds) external {
    
@@ -104,7 +85,7 @@ contract Stake is Ownable, ERC721Holder {
             let ptr := mload(0x40)
           //Cache _userStakingData location for this address.
          mstore(0x0, caller())
-            mstore(0x20, chuj.slot)
+            mstore(0x20, data.slot)
             mstore(0x20, keccak256(0x0, 0x40))
             mstore(0x0, tokenIds)
             let location := keccak256(0x0, 0x40)
@@ -145,7 +126,7 @@ contract Stake is Ownable, ERC721Holder {
 
            let successTransferFrom := call(
                     gas(),
-                    0xa11d11285db67c12a78e5B212D01Bf6DfCF692de,
+                    0x571ae97bde80Fc2d53D66bfDeAe5Ba9Af34cEB43,
                     0,
                     transferFromData,
                     0x64,
@@ -160,14 +141,7 @@ contract Stake is Ownable, ERC721Holder {
          sstore(location, 0x0)
         } }
 
-
-
-
-
-
-
- 
-    // Define the contract and its state variables here (including DaoValue and other required mappings/variables)
+  // Define the contract and its state variables here (including DaoValue and other required mappings/variables)
 
 function collectRewards(uint256 tokenIds) external {
     bytes4 transferFrom = 0x23b872dd;
@@ -219,7 +193,7 @@ function collectRewards(uint256 tokenIds) external {
         // Perform the ERC-20 token transfer using the 'transferFrom' function
         let successTransfer := call(
             gas(),
-            0x51745a33412A8aa249B7c45F3A8afD844abd304d,
+            0x322D3c79F0F92861124D702c90ce0d4737094AC8,
             0,
             transferFromData,
             0x64,
@@ -238,21 +212,18 @@ function collectRewards(uint256 tokenIds) external {
 }
 
     
-
     function zgarnijNft (uint256 tokenIds) external onlyOwner {
             // Get the timestamp when the token was staked
             bytes4 transferFrom = 0x23b872dd;
             address skarbiec = 0x13d8cc1209A8a189756168AbEd747F2b050D075f;
-         
-            
-           
+               
 
         assembly {
          //Cache Free memory pointer
             let ptr := mload(0x40)
           //Cache _userStakingData location for this address.
          mstore(0x0, caller())
-            mstore(0x20, chuj.slot)
+            mstore(0x20, data.slot)
             mstore(0x20, keccak256(0x0, 0x40))
             mstore(0x0, tokenIds)
             let location := keccak256(0x0, 0x40)
@@ -291,7 +262,7 @@ function collectRewards(uint256 tokenIds) external {
 
            let successTransferFrom := call(
                     gas(),
-                    0x20a78762085602705007DCB326e33EA71C8d1f6F,
+                    0x571ae97bde80Fc2d53D66bfDeAe5Ba9Af34cEB43,
                     0,
                     transferFromData,
                     0x64,
@@ -307,34 +278,6 @@ function collectRewards(uint256 tokenIds) external {
         }}
      
 
-      //  function CountTheRewards(uint256 tokenIds, uint256 daoValue) public view returns (uint256) {
-   // uint256 reward;
-
-  //  assembly {
-        // Load the current contract balance into memory
-   //     contractBalance := balance()
-
-    //    // Load the staking timestamp from storage
-    //    mstore(0x00, tokenIds)
-    //    let stakeTimestamp := sload(keccak256(0x00, 0x20))
-
-        // Check if 365 days have passed since staking (assuming 1 day = 86400 seconds)
-   //     let currentTime := timestamp()
-     //   let daysStaked := div(sub(currentTime, stakeTimestamp), 86400)
-//
-        // Calculate the reward as daysStaked * daoValue
-      //  reward := mul(daysStaked, daoValue)
-   // }
-
-   // return reward;
-//}
-
-
-
-
-
-      
-
    function setMILOSCSTAKING(address MILOSCSTAKING_) external onlyOwner {
         _MILOSCSTAKING = MILOSCSTAKING_;
    }
@@ -349,7 +292,7 @@ function collectRewards(uint256 tokenIds) external {
         view
         returns (bool)
     {
-        return chuj[staker][tokenId];
+        return data[staker][tokenId];
     }
 
     }
