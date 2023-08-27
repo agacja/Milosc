@@ -1,2 +1,2 @@
-# Stake NFT's in assembly for token rewards.
+# Gas optimised staking platform
 
