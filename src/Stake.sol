@@ -23,7 +23,6 @@ contract Milosc is Ownable, ERC721Holder {
     uint256 private lifeSpan;
     address public safeadd;
 
-
  
 function stake(uint256 tokenIds, address _nft) external {
 
@@ -74,7 +73,6 @@ function stake(uint256 tokenIds, address _nft) external {
     }
 }
 
-       
   function unstake(uint256 tokenIds,address _nft) external {
             
            address reciever = msg.sender;
