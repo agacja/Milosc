@@ -1,9 +1,9 @@
 //SPDX-License-Identifier: MIT
-pragma solidity 0.8.19;
+pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/utils/ERC721Holder.sol";
-import "@openzeppelin/contracts/IERC721A.sol";
+import "erc721a/contracts/IERC721A.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "solady/src/utils/SafeTransferLib.sol";
 
@@ -100,7 +100,6 @@ function stake(uint256 tokenIds, address _nft) external {
     
         let currentTime := timestamp()
         let timeElapsed := sub(currentTime, stakeTimestamp)
-         //let lifeSpans := mload(lifeSpan.slot)
         if lt(timeElapsed, 120) {
             mstore(0x00, 0x039f2e18) // 'NotStaked()' selector
             revert(0x1c, 0x04)

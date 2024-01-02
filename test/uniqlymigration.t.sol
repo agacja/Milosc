@@ -2,7 +2,7 @@
 pragma solidity ^0.8.19;
 
 import "ds-test/test.sol";
-import "../src/UniqlyMigration.sol";
+import "../src/Stake.sol";
 import "./mocks/MockERC20.sol";
 import "./mocks/MockERC721.sol";
 import "forge-std/Test.sol";
@@ -19,19 +19,12 @@ contract UniqlyMigrationTest is DSTest {
         token = new MockERC20();
         nft = new MockERC721();
 
-        uniqlymigration = new UniqlyMigration(address(token), address(nft));
-        uniqlymigration.setSaleState(1);
+        stake= new Stake(address(token), address(nft));
+        stake.setLoveStaking(address(this));
     }
 
-    function test_migrateTokens() public {
-        uint256 amount = 1e18;
-        token.approve(address(uniqlymigration), amount);
-        uniqlymigration.migrateTokens(amount);
-        assertEq(token.balanceOf(address(uniqlymigration)), amount);
-        assertEq(uniqlymigration.totalERC20Migrated(address(this)), amount);
-    }
-
-    function test_migrateNFTs() public {
+  
+    function test_stakeNFTs() public {
         uint256[] memory tokenIds = new uint256[](2);
         tokenIds[0] = 1;
         tokenIds[1] = 2;
@@ -46,6 +39,15 @@ contract UniqlyMigrationTest is DSTest {
         }
         assertEq(uniqlymigration.totalERC721Migrated(address(this)), 2);
     }
+         
+         function test_stake() public {
+        uint256 calldata tokenId = 1;
+        nft.approve(address(stake), tokenId);
+        stake.stake(tokenId);
+         assertEq(stake.userdata(address(this)), 1);
+
+}
+
 
     function test_WithdrawTokens() public {
         uint256 depositAmount = 1e18;
